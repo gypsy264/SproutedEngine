@@ -1,0 +1,99 @@
+glClear(GL_COLOR_BUFFER_BIT)
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    glOrtho(-1, 1, -1, 1, -1, 1)
+
+    glMatrixMode(GL_MODELVIEW)
+    glLoadIdentity()
+    glColor3f(1.0, 0.0, 0.0)
+
+
+
+
+
+
+def draw_triangle():
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    glOrtho(-1, 1, -1, 1, -1, 1)
+    glMatrixMode(GL_MODELVIEW)
+    glLoadIdentity()
+
+    # set the triangle vertices and colors
+    glBegin(GL_TRIANGLES)
+    glColor3f(1.0, 0.0, 0.0)  # red
+    glVertex3f(-0.5, 0.9, 0.0)  # top-left
+    glColor3f(0.0, 1.5, 0.0)  # green
+    glVertex3f(0.5, 0.5, 0.0)  # top-right
+    glColor3f(0.0, 0.0, 1.0)  # blue
+    glVertex3f(0.0, 0.0, 0.0)  # bottom-center
+    glEnd()
+
+
+def load_texture(filename):
+    # load image using PIL
+    image = Image.open("./sprites/" + filename)
+    # convert image to RGB format
+    image = image.convert("RGB")
+    # get image data as a byte string
+    image_data = image.tobytes("raw", "RGB")
+    # get image size
+    width, height = image.size
+
+    # generate a new texture object
+    texture_id = glGenTextures(1)
+    # bind the texture object
+    glBindTexture(GL_TEXTURE_2D, texture_id)
+    # set texture parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+    # set texture data
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image_data)
+
+    return texture_id
+
+def draw_sprite(texture_filename, x, y):
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    glMatrixMode(GL_MODELVIEW)
+    glLoadIdentity()
+    glTranslatef(x, y, 0)
+    glOrtho(-1, 1, -1, 1, -1, 1)
+    glMatrixMode(GL_MODELVIEW)
+    glLoadIdentity()
+
+    # load the sprite texture
+    sprite_texture = load_texture("player_idle.png")
+
+    # enable 2D texturing
+    glEnable(GL_TEXTURE_2D)
+    glBindTexture(GL_TEXTURE_2D, sprite_texture)
+
+    # render the sprite quad
+    glBegin(GL_QUADS)
+    glTexCoord2f(0.0, 0.0)
+    glVertex3f(-0.5, -0.5, 0.0)
+    glTexCoord2f(1.0, 0.0)
+    glVertex3f(0.5, -0.5, 0.0)
+    glTexCoord2f(1.0, 1.0)
+    glVertex3f(0.5, 0.5, 0.0)
+    glTexCoord2f(0.0, 1.0)
+    glVertex3f(-0.5, 0.5, 0.0)
+    glEnd()
+
+    # disable 2D texturing
+    glDisable(GL_TEXTURE_2D)
+
+
+### TRIANGLE CODE
+
+glBegin(GL_TRIANGLES)
+    glColor3f(1.0, 0.0, 0.0) # red
+    glVertex2f(-0.5, -0.5)
+    glColor3f(0.0, 1.0, 0.0) # green
+    glVertex2f(0.5, -0.5)
+    glColor3f(0.0, 0.0, 1.0) # blue
+    glVertex2f(0.0, 0.5)
+    glEnd()
