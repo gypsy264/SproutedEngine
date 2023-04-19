@@ -5,6 +5,7 @@ from OpenGL.GLU import *
 from PIL import Image
 import time
 import random
+import ui
 
 
 
@@ -64,8 +65,10 @@ def load_texture(filename):
 
     return texture_id
 
+
 def set_2d_projection():
-    glClearColor(0.0, 0.0, 0.0, 1.0)  # set clear color to black
+    #glClearColor(0.0, 0.0, 0.0, 1.0)  # set clear color to black
+    glClearColor(0.4, 0.6, 0.8, 1.0)  # Set clear color to light blue
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
@@ -126,11 +129,17 @@ def keyboard_up(key, x, y):
     keydown = None
     
 def reshape(width, height):
+    if height == 0:
+        height = 1
+
     glViewport(0, 0, width, height)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    glOrtho(-width/2, width/2, -height/2, height/2, -1, 1)
+
+    gluPerspective(45, float(width) / float(height), 0.1, 100.0)
+
     glMatrixMode(GL_MODELVIEW)
+    glLoadIdentity()
     
 def init(ScreenName):
     if ScreenName == None:
