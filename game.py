@@ -4,6 +4,7 @@ import engine.engine as engine
 import engine.utilities as utilities 
 import engine.gameobj as gameobj
 import engine.ui as ui
+import engine.crashhandler as crashhandler
 
 
 #Grpahics

@@ -5,7 +5,7 @@ from OpenGL.GLU import *
 from PIL import Image
 import time
 import random
-
+import engine.crashhandler as crashhandler
 
 
 
@@ -166,4 +166,4 @@ try:
         glutMainLoop()
 
 except Exception:
-    print("Error")
+    crashhandler.show_error_dialog()
