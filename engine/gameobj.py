@@ -1,4 +1,4 @@
-import engine
+import engine.engine as engine
 class GameObject:
 
     instances = [] 

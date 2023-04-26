@@ -1,9 +1,10 @@
 #TestingGame
 #Engine
-import engine 
-import utilities 
-import gameobj
-import ui
+import engine.engine as engine 
+import engine.utilities as utilities 
+import engine.gameobj as gameobj
+import engine.ui as ui
+
 
 #Grpahics
 from OpenGL.GL import *
@@ -29,6 +30,8 @@ all_game_objects = [game_object1, game_object2, wall1]
 def start_local():
     engine.init("Game") 
     engine.update()
+
+    
   
 
 def update_overwrite():
@@ -67,7 +70,7 @@ def draw_overwrite():
 
     global previous_time
     utilities.ShowFrame()
-
+    ui.draw_text(0, 0, "Collision detected!")
     current_time = time.time()
     dt = current_time - previous_time
     previous_time = current_time
@@ -81,12 +84,6 @@ def draw_overwrite():
    
     if game_object1.collides_with(game_object2):
         game_object1.destroy()
-        ui.draw_text(0, 0, "Collision detected!")
-        
-        print("Collision detected!")
-    else:
-            ui.draw_text(0, 0, "Not detected!")
-            print("No collision")
             
     game_object1.draw()
     game_object2.draw()
