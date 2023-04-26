@@ -5,8 +5,8 @@ from OpenGL.GLU import *
 from PIL import Image
 import time
 import random
-import engine.crashhandler as crashhandler
-
+import crashhandler as crashhandler
+import sys
 
 
 try:
@@ -25,11 +25,14 @@ try:
 
 
     def draw_screen():
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)  # Clear the screen
-        set_2d_projection()
-        draw()
-        glutSwapBuffers()
-        glFlush()  # Force execution of GL commands
+        try:
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)  # Clear the screen
+            set_2d_projection()
+            draw()
+            glutSwapBuffers()
+            glFlush()  # Force execution of GL commands
+        except Exception:
+            crashhandler.show_error_dialog()
 
 
     def draw():
@@ -123,16 +126,26 @@ try:
 
 
     def keyboard(key, x, y):
-        global keydown
-        key_name = key.decode()[0].lower()
-        keydown = key_name
-        keys_down.add(key_name)
+        try:
+            global keydown
+            key_name = key.decode()[0].lower()
+            keydown = key_name
+            keys_down.add(key_name)
+        except Exception:
+            crashhandler.show_error_dialog()
+        
 
     def keyboard_up(key, x, y):
-        global keydown
-        key_name = key.decode()[0].lower()
-        keys_down.remove(key_name)
-        keydown = None
+        try:
+            global keydown
+            key_name = key.decode()[0].lower()
+            keys_down.remove(key_name)
+            keydown = None
+        except Exception:
+            crashhandler.show_error_dialog()
+            
+            
+        
         
     def reshape(width, height):
         if height == 0:
@@ -151,19 +164,23 @@ try:
         glLoadIdentity()
         
     def init(ScreenName):
-        if ScreenName == None:
-            print("Warning: ScreenName has no value")
-            ScreenName = "Game"
-        glutInit()
-        glutInitDisplayMode(GLUT_RGBA|GLUT_DOUBLE|GLUT_DEPTH)
-        glutInitWindowSize(640, 480)
-        glutCreateWindow(ScreenName)
-        glutKeyboardFunc(keyboard)
-        glutKeyboardUpFunc(keyboard_up)
-        glutReshapeFunc(reshape)
-        glutDisplayFunc(draw_screen)
-        glutTimerFunc(1000 // 60, update_tick, 0)
-        glutMainLoop()
+        try:
+            if ScreenName == None:
+                print("Warning: ScreenName has no value")
+                ScreenName = "Game"
+            glutInit()
+            glutInitDisplayMode(GLUT_RGBA|GLUT_DOUBLE|GLUT_DEPTH)
+            glutInitWindowSize(640, 480)
+            glutCreateWindow(ScreenName)
+            glutKeyboardFunc(keyboard)
+            glutKeyboardUpFunc(keyboard_up)
+            glutReshapeFunc(reshape)
+            glutDisplayFunc(draw_screen)
+            glutTimerFunc(1000 // 60, update_tick, 0)
+            glutMainLoop()
+        except Exception:
+            crashhandler.show_error_dialog()
+
 
 except Exception:
     crashhandler.show_error_dialog()
